@@ -1,0 +1,8 @@
+apiVersion: apps/v1
+kind: ConfigMap
+metadata:
+    name: my-db-creds
+data:
+    {{- range $key, $value := .Values.global.cluster.data.mydbcreds }}
+    {{ $key }}: {{ $value  | quote }}
+    {{- end }}

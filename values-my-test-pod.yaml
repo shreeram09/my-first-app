@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-test-pod
+spec:
+  initContainers:
+  - name: liquibase-init
+    image: my-liquibase-init:latest  # Custom image
+    command: ["sh", "-c"]
+    args:
+      - |
+        # Extract changelog files from the JAR
+        mkdir -p /liquibase/changelog
+        unzip /app/my-quarkus-app.jar -d /liquibase/changelog
+
+        # Release any existing Liquibase locks
+        liquibase --changeLogFile=/liquibase/changelog/db.changelog.xml --url=$DB_URL --username=$DB_USER --password=$DB_PASS releaseLocks
+
+        # Get the current and latest database tags
+        CURRENT_TAG=$CURRENT_TAG
+        LATEST_TAG=$(liquibase --changeLogFile=/liquibase/changelog/db.changelog.xml --url=$DB_URL --username=$DB_USER --password=$DB_PASS history | grep -oP '(?<=tag: ).*' | tail -1 || echo "")
+
+        # Perform rollback or update based on tags
+        if [ -n "$LATEST_TAG" ] && [ "$CURRENT_TAG" \< "$LATEST_TAG" ]; then
+          liquibase --changeLogFile=/liquibase/changelog/db.changelog.xml --url=$DB_URL --username=$DB_USER --password=$DB_PASS rollback $CURRENT_TAG
+        else
+          liquibase --changeLogFile=/liquibase/changelog/db.changelog.xml --url=$DB_URL --username=$DB_USER --password=$DB_PASS update
+        fi
+    envFrom:
+      - configMapRef:
+          name: my-test-pod-env
+      - configMapRef:
+          name: my-db-creds
+    volumeMounts:
+      - name: liquibase-changelog
+        mountPath: /liquibase/changelog
+  containers:
+  - name: my-test-container
+    image: my-quarkus-app:latest
+    volumeMounts:  # Optional, remove if not needed
+      - name: liquibase-changelog
+        mountPath: /app
+  volumes:
+  - name: liquibase-changelog
+    emptyDir: {}

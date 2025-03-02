@@ -103,7 +103,8 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
-
+initContainers: []
+containers: []
 # Additional volumes on the output Deployment definition.
 volumes: []
 # - name: foo
@@ -122,3 +123,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+global:
+  cluster:
+      data:
+        my-db-creds:
+          - DB_URL: "jdbc:postgresql://my-db:5432/mydb"
+          - DB_USER: "myuser"
+          - DB_PASS: "mypassword"
