@@ -123,12 +123,12 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-global:
-  cluster:
-      data:
-        mydbcreds:
-          - DB_USER: "myuser"
-          - DB_PASS: "mypassword"
-        mytestpodenv:
-          - DB_URL: "jdbc:postgresql://my-db:5432/mydb"
-          - CURRENT_TAG: "v1.0.0"
+# global:
+#   cluster:
+#       data:
+#         mydbcreds:
+#           - DB_USER: "myuser"
+#           - DB_PASS: "mypassword"
+#         mytestpodenv:
+#           - DB_URL: "jdbc:postgresql://my-db:5432/mydb"
+#           - CURRENT_TAG: "v1.0.0"
