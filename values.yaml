@@ -126,7 +126,9 @@ affinity: {}
 global:
   cluster:
       data:
-        my-db-creds:
+        mydbcreds:
           - DB_URL: "jdbc:postgresql://my-db:5432/mydb"
           - DB_USER: "myuser"
           - DB_PASS: "mypassword"
+        mytestpodenv:
+          - CURRENT_TAG: "v1.0.0"
