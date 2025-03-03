@@ -3,6 +3,11 @@ kind: Secret
 metadata:
     name: my-db-creds
 data:
+    {{- if .Values.global.cluster.data.mydbcreds }}
     {{- range $key, $value := .Values.global.cluster.data.mydbcreds }}
     {{ $key }}: {{ $value  | quote }}
+    {{- end }}
+    {{- else}}
+    DB_USER: 'postgres'
+    DB_PASS: 'password'
     {{- end }}

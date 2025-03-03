@@ -3,6 +3,10 @@ kind: ConfigMap
 metadata:
     name: my-test-pod-env
 data:
+    {{- if .Values.global.cluster.data.mytestpodenv }}
     {{- range $key, $value := .Values.global.cluster.data.mytestpodenv }}
     {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- else }}
+    SAMPLE_ENV: "sample-value"
     {{- end }}
