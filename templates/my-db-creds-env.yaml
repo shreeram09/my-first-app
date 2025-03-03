@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: ConfigMap
+kind: Secret
 metadata:
     name: my-db-creds
 data:
