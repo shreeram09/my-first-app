@@ -3,7 +3,7 @@ kind: Secret
 metadata:
     name: my-db-creds
 data:
-    {{- if .Values.global.cluster.data.mydbcreds }}
+    {{- if .Values.global }}
     {{- range $key, $value := .Values.global.cluster.data.mydbcreds }}
     {{ $key }}: {{ $value  | quote }}
     {{- end }}
