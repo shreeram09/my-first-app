@@ -26,11 +26,11 @@ spec:
         else
           liquibase --changeLogFile=/liquibase/changelog/db.changelog.xml --url=$DB_URL --username=$DB_USER --password=$DB_PASS update
         fi
-    # envFrom:
-    #   - configMapRef:
-    #       name: my-test-pod-env
-    #   - secretRef:
-    #       name: my-db-creds
+    envFrom:
+      - configMapRef:
+          name: my-test-pod-env
+      - secretRef:
+          name: my-db-creds
     volumeMounts:
       - name: liquibase-changelog
         mountPath: /liquibase/changelog
